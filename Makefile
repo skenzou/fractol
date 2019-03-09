@@ -6,7 +6,7 @@
 #    By: aben-azz <aben-azz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by aben-azz          #+#    #+#              #
-#    Updated: 2019/03/09 04:50:10 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/09 10:26:36 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,9 @@ _IBLUE			=	\x1b[44m
 _IPURPLE		=	\x1b[45m
 _ICYAN			=	\x1b[46m
 _IWHITE			=	\x1b[47m
-MSG				=	Compilation de fractol
+_MAGENTA   = \x1b[35m
+
+MSG				=	Compiling fractol
 .PHONY: all, $(NAME), clean, fclean, re
 
 NAME = fractol
@@ -68,17 +70,21 @@ $(NAME): $(LIBFT_PATH)$(LIBFT_NAME) $(OBJ)
 		@make -C $(LFT_PATH)
 		@make -C $(MLX_PATH)
 		@$(CC) -o $(NAME) $(MLX_LINK) $(FRAM) -L $(LFT_PATH) -lft $^ -o $@
-		@printf "$(_BOLD)$(_RED)Executable ./fractol \
-		pret \n$(_END)$(_CYAN)$(_END)"
+		@printf "$(_BOLD)$(_RED)./fractol is ready for use\n$(_END)$(_CYAN)$(_END)"
+		@printf "$(_BOLD)$(_RED)\n\nusage: ./fractol <fractol_name>\n$(_RESET)"
+		@printf "$(_BOLD)$(_CYAN)fractols:\n$(_RESET)"
+		@printf "$(_BOLD)$(_BLUE)--> Mandelbrot\n$(_RESET)"
+		@printf "$(_BOLD)$(_MAGENTA)--> Julia\n$(_RESET)"
+		@printf "$(_BOLD)$(_YELLOW)--> Turtle\n$(_RESET)"
 
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 		@mkdir -p $(OBJ_PATH) 2> /dev/null || true
 		@$(CC) $(C_FLAGS) $(INC) $(MLX_INC) -o $@ -c $<
-		@printf "$(_BOLD)$(_PURPLE)$(MSG)$(_END) $(_CYAN)%-$(LONGEST)s\
+		@printf "$(_BOLD)$(_BLUE)$(MSG)$(_END) $(_BOLD)$(_CYAN)%-$(LONGEST)s\
 		$(_END)" $(notdir $<)
 		@if test -s srcs/$*.c; then \
-		printf "$(_GREEN) [OK]\n$(_END)";\
+		printf "$(_GREEN) [SUCCES]\n$(_END)";\
 		else \
 		printf "$(_RED) [ERROR]\n$(_END)"; fi
 
@@ -87,12 +93,12 @@ clean:
 		@make -C $(LFT_PATH) clean
 		@make -C $(MLX_PATH) clean
 		@rm -rf $(OBJ_PATH)
-		@echo "$(_BOLD)$(_RED)Suppression des objets de {${NAME}} terminée$(_END)"
+		@echo "$(_BOLD)$(_RED)Sucessfuly removed all objects from fractol$(_END)"
 
 fclean: clean
 		@make -C $(MLX_PATH) clean
 		@make -C $(LFT_PATH) fclean
 		@rm -f $(NAME)
-		@echo "$(_BOLD)$(_RED)Suppression de {${NAME}} terminée$(_END)"
+		@echo "$(_BOLD)$(_RED)Sucessfuly removed ./fractol from fractol$(_END)"
 
 re: fclean all

@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/09 12:43:35 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/09 04:46:46 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/09 10:14:17 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ _IBLUE			=	\x1b[44m
 _IPURPLE		=	\x1b[45m
 _ICYAN			=	\x1b[46m
 _IWHITE			=	\x1b[47m
-MSG					= Compilation de la libft:
+MSG					= Compiling the libft:
 
 OBJPATH			= obj/
 SRCPATH			=	srcs/
@@ -69,28 +69,28 @@ LONGEST			=	$(shell echo $(notdir $(SRCS)) | tr " " "\n" | awk ' { if (\
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "$(_BOLD)$(_YELLOW)Creation de la libft ...$(_END)"
+	@echo "$(_BOLD)$(_PURPLE)Making ${NAME}...$(_END)"
 	@$(AR) $(NAME) $(OBJ)
-	@echo "$(_BOLD)$(_GREEN)Compilation de la libft terminée => ${NAME}$(_END)"
+	@echo "$(_BOLD)$(_GREEN)${NAME} is ready for use$(_END)"
 
 $(OBJ): obj/%.o: srcs/%.c
 	@if ! test -d $(OBJPATH); then \
 	mkdir -p $(OBJPATH); fi
 	@$(COMP) $(CFLAGS) -o $@ $<
-	@printf "$(_BOLD)$(_PURPLE)$(MSG)$(_END) $(_CYAN)%-$(LONGEST)s\
+	@printf "$(_BOLD)$(_BLUE)$(MSG)$(_END) $(_BOLD)$(_CYAN)%-$(LONGEST)s\
 	$(_END)" $(notdir $<)
 	@if test -s obj/$*.o; then \
-	printf "$(_GREEN)[OK]\n$(_END)";\
+	printf "$(_GREEN)[SUCCESS]\n$(_END)";\
 	else \
 	printf "$(_RED)[ERROR]\n$(_END)"; fi
 
 clean:
 	@rm -rf $(OBJPATH)
-	@echo "$(_BOLD)$(_RED)Suppression des objets de {${NAME}} terminée$(_END)"
+	@echo "$(_BOLD)$(_RED)Sucessfuly removed all objects from the libft$(_END)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "$(_BOLD)$(_RED)Suppression de {${NAME}} terminée$(_END)"
+	@echo "$(_BOLD)$(_RED)Sucessfuly removed ${NAME} from the libft$(_END)"
 
 re: fclean all
 
