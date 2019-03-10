@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:24:02 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/10 02:26:48 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/10 02:49:24 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void      *julia_thread(void *dat)
         old.i = new.i;
         new.r = old.r * old.r - old.i * old.i + fract->shapecte1;
         new.i = 2 * old.r * old.i + fract->shapecte2;
-        if((new.r * new.r + new.i * new.i) > 2)
+        if((new.r * new.r + new.i * new.i) > 4)
               break;
       }
       put_pixel_img(fract,

@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/10 01:56:21 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/10 02:49:00 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ typedef struct		s_map
 
 typedef struct s_complex
 {
-	float r;
-	float i;
+	double r;
+	double i;
 }						t_complex;
 
 typedef struct		s_point
@@ -86,11 +86,11 @@ typedef struct		s_fractol
 					t_image		*img;
 					t_map		*map;
 					int			altitude;
-					float			zoom;
-					float			xoffset;
-					float			yoffset;
-					float			shapecte1;
-					float			shapecte2;
+					double			zoom;
+					double			xoffset;
+					double			yoffset;
+					double			shapecte1;
+					double			shapecte2;
 					int					max_iter;
 					t_list		*colors;
 					int			colorslist;
