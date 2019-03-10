@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/09 09:55:50 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/10 01:56:21 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 # include <mlx.h>
 # include <math.h>
 # include <fcntl.h>
-# define WIN_WIDTH 2500
-# define WIN_HEIGHT 1500
+# include <pthread.h>
+# define WIN_WIDTH 1300
+# define WIN_HEIGHT 700
 # define DRAW_WIDTH 2000
 # define DRAW_HEIGHT 1300
 # define ESCAPE 53
@@ -57,8 +58,8 @@ typedef struct		s_map
 
 typedef struct s_complex
 {
-	double r;
-	double i;
+	float r;
+	float i;
 }						t_complex;
 
 typedef struct		s_point
@@ -85,19 +86,31 @@ typedef struct		s_fractol
 					t_image		*img;
 					t_map		*map;
 					int			altitude;
-					double			zoom;
-					double			xoffset;
-					double			yoffset;
-					double			shapecte1;
-					double			shapecte2;
+					float			zoom;
+					float			xoffset;
+					float			yoffset;
+					float			shapecte1;
+					float			shapecte2;
 					int					max_iter;
 					t_list		*colors;
 					int			colorslist;
 					int			spectrum[12];
-					t_point		(*rasterise)(struct s_fractol *frac, t_point point, int z);
+					void		*(*thread)(void *dat);
 }									t_fractol;
+
+typedef struct s_thread_data
+{
+	t_fractol *fract;
+	int y;
+	int y_end;
+	int x;
+	int x_end;
+}							t_thread_data;
 
 void			process(t_fractol *frac);
 int				put_pixel_img(t_fractol *frac, t_point p, int border);
 int   create_julia(t_fractol *fract);
+void        default_values(t_fractol *fract);
+t_image		*create_image_test(t_fractol *fract);
+
 #endif
