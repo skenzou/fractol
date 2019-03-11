@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:24:02 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/11 04:29:56 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/11 05:52:44 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,28 +94,26 @@ void      *julia_thread(void *dat)
   register t_complex old;
   register int i;
   register int x;
-  register int y;
-  t_thread_data *data;
-  data = (t_thread_data *)dat;
-  t_fractol *fract = data->fract;
+  register t_thread_data *data;
 
-  y = data->y - 1;
-  while (++y < data->y_end && (x = data->x - 1))
+  data = (t_thread_data *)dat;
+  data->y--;
+  while (++data->y < data->y_end && (x = data->x - 1))
     while(++x < data->x_end && (i = -1))
     {
-      new.r = 1.5 * ((double)x - WIN_WIDTH / 2.0) / (double)(0.5 * fract->zoom * WIN_WIDTH) + fract->xoffset;
-      new.i = ((double)y - WIN_HEIGHT / 2.0) / (double)(0.5 * fract->zoom * WIN_HEIGHT) + fract->yoffset;
-      while (++i < fract->max_iter)
+      new.r = 1.5 * ((double)x - WIN_WIDTH / 2.0) / (double)(0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
+      new.i = ((double)data->y - WIN_HEIGHT / 2.0) / (double)(0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
+      while (++i < data->fract->max_iter)
       {
         old.r = new.r;
         old.i = new.i;
-        new.r = old.r * old.r - old.i * old.i + fract->shapecte1;
-        new.i = 2 * old.r * old.i + fract->shapecte2;
+        new.r = old.r * old.r - old.i * old.i + data->fract->shapecte1;
+        new.i = 2 * old.r * old.i + data->fract->shapecte2;
         if((new.r * new.r + new.i * new.i) > 4.0)
               break;
       }
-      put_pixel_img(fract,
-      (t_point){.x = x, .y = y, .color = get_rgb_smooth(i, fract->max_iter)}, 1);
+      put_pixel_img(data->fract,
+      (t_point){.x = x, .y = data->y, .color = get_rgb_smooth(i, data->fract->max_iter)}, 1);
     }
   return (0);
 }
@@ -127,32 +125,28 @@ void      *mandelbrot_thread(void *dat)
   register t_complex p;
   register int i;
   register int x;
-  register int y;
-  t_thread_data *data;
-  data = (t_thread_data *)dat;
-  t_fractol *fract = data->fract;
+  register t_thread_data *data;
 
-  y = data->y - 1;
-  while (++y < data->y_end && (x = data->x - 1))
+  data = (t_thread_data *)dat;
+  data->y--;
+  while (++data->y < data->y_end && (x = data->x - 1))
     while(++x < data->x_end && (i = -1))
     {
-      p.r = 1.5 * (x - WIN_WIDTH / 2) / (0.5 * fract->zoom * WIN_WIDTH) + fract->xoffset;
-      p.i = (y - WIN_HEIGHT / 2) / (0.5 * fract->zoom * WIN_HEIGHT) + fract->yoffset;
+      p.r = 1.5 * (x - WIN_WIDTH / 2) / (0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
+      p.i = (data->y - WIN_HEIGHT / 2) / (0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
       new.r = 0;
       new.i = 0;
-      old.i = 0;
-      old.r = 0;
-      while (++i < fract->max_iter)
+      while (++i < data->fract->max_iter)
       {
         old.r = new.r;
         old.i = new.i;
         new.r = old.r * old.r - old.i * old.i + p.r;
         new.i = 2 * old.r * old.i + p.i;
-        if((new.r * new.r + new.i * new.i) > 2)
+        if((new.r * new.r + new.i * new.i) > 2.0)
               break;
       }
-      put_pixel_img(fract,
-      (t_point){.x = x, .y = y, .color = get_rgb_smooth(i, fract->max_iter)}, 1);
+      put_pixel_img(data->fract,
+      (t_point){.x = x, .y = data->y, .color = get_rgb_smooth(i, data->fract->max_iter)}, 1);
     }
   return (0);
 }
@@ -180,7 +174,7 @@ void      *mandelbrot_thread(void *dat)
 //     pthread_join(tid2, NULL);
 //
 //
-//  
+//
 // }
 
 // void   launch_threads(t_fractol *fract)
@@ -214,7 +208,7 @@ void      *mandelbrot_thread(void *dat)
 //     pthread_join(tid3, NULL);
 //     pthread_join(tid4, NULL);
 //
-//  
+//
 // }
 
  void   launch_threads(t_fractol *fract)

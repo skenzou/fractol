@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/11 04:29:07 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/11 05:44:10 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <math.h>
 # include <fcntl.h>
 # include <pthread.h>
-# define WIN_WIDTH 2300.0
-# define WIN_HEIGHT 1400.0
+# define WIN_WIDTH 1200.0
+# define WIN_HEIGHT 800.0
 # define DRAW_WIDTH 2000
 # define DRAW_HEIGHT 1300
 # define ESCAPE 53
