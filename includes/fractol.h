@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/10 02:49:00 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/11 04:29:07 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <math.h>
 # include <fcntl.h>
 # include <pthread.h>
-# define WIN_WIDTH 1300
-# define WIN_HEIGHT 700
+# define WIN_WIDTH 2300.0
+# define WIN_HEIGHT 1400.0
 # define DRAW_WIDTH 2000
 # define DRAW_HEIGHT 1300
 # define ESCAPE 53
@@ -109,7 +109,7 @@ typedef struct s_thread_data
 
 void			process(t_fractol *frac);
 int				put_pixel_img(t_fractol *frac, t_point p, int border);
-int   create_julia(t_fractol *fract);
+void   launch_threads(t_fractol *fract);
 void        default_values(t_fractol *fract);
 t_image		*create_image_test(t_fractol *fract);
 

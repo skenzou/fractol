@@ -6,7 +6,7 @@
 #    By: aben-azz <aben-azz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by aben-azz          #+#    #+#              #
-#    Updated: 2019/03/10 02:40:11 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/09 10:25:23 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ MSG				=	Compiling fractol
 NAME = fractol
 
 cc = gcc
-C_FLAGS = -Wall -Wextra -Werror -pthread
+C_FLAGS = -Wall -Wextra -Werror
 
 MLX_PATH = ./minilibx
 MLX_LINK = -L $(MLX_PATH) -lmlx -framework OpenGL -framework AppKit
@@ -99,6 +99,6 @@ fclean: clean
 		@make -C $(MLX_PATH) clean
 		@make -C $(LFT_PATH) fclean
 		@rm -f $(NAME)
-		@echo "$(_BOLD)$(_RED)Sucessfuly removed ./fractol from fractol$(_END)"
+		@echo "$(_BOLD)$(_RED)Sucessfuly removed ${NAME} from fractol$(_END)"
 
 re: fclean all

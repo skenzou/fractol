@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/27 03:50:36 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/10 02:22:11 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/11 04:29:35 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ void			process(t_fractol *fract)
 	if (fract->img->ptr)
 		mlx_destroy_image(fract->mlx_ptr, fract->img->ptr);
 	create_image(fract);
-	create_julia(fract);
+	launch_threads(fract);
 	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr, 0, 0);
-	mlx_string_put(fract->mlx_ptr, fract->win_ptr, 10, 10, 0xff0080,
-	ft_ftoa(fract->zoom, 10));
 }
