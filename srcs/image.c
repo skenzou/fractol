@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/27 03:50:36 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/11 05:40:28 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/13 08:18:42 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ inline 	int				put_pixel_img(t_fractol *frac, t_point p, int border)
 // }
 
 
-static void		create_image(t_fractol *fract)
+void		create_image(t_fractol *fract)
 {
 	fract->img->ptr = mlx_new_image(fract->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	if (!(fract->img->ptr))
@@ -72,10 +72,10 @@ static void		create_image(t_fractol *fract)
 
 void			process(t_fractol *fract)
 {
-	mlx_clear_window(fract->mlx_ptr, fract->win_ptr);
-	if (fract->img->ptr)
-		mlx_destroy_image(fract->mlx_ptr, fract->img->ptr);
-	create_image(fract);
+	// mlx_clear_window(fract->mlx_ptr, fract->win_ptr);
+	// if (fract->img->ptr)
+	// 	mlx_destroy_image(fract->mlx_ptr, fract->img->ptr);
+	// create_image(fract);
 	launch_threads(fract);
 	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr, 0, 0);
 }

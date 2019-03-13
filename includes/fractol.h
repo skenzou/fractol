@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/11 05:44:10 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/13 08:18:38 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <math.h>
 # include <fcntl.h>
 # include <pthread.h>
-# define WIN_WIDTH 1200.0
-# define WIN_HEIGHT 800.0
+# define WIN_WIDTH 600.0
+# define WIN_HEIGHT 600.0
 # define DRAW_WIDTH 2000
 # define DRAW_HEIGHT 1300
 # define ESCAPE 53
@@ -84,17 +84,12 @@ typedef struct		s_fractol
 					void		*mlx_ptr;
 					void		*win_ptr;
 					t_image		*img;
-					t_map		*map;
-					int			altitude;
 					double			zoom;
 					double			xoffset;
 					double			yoffset;
 					double			shapecte1;
 					double			shapecte2;
 					int					max_iter;
-					t_list		*colors;
-					int			colorslist;
-					int			spectrum[12];
 					void		*(*thread)(void *dat);
 }									t_fractol;
 
@@ -107,6 +102,7 @@ typedef struct s_thread_data
 	int x_end;
 }							t_thread_data;
 
+void		create_image(t_fractol *fract);
 void			process(t_fractol *frac);
 int				put_pixel_img(t_fractol *frac, t_point p, int border);
 void   launch_threads(t_fractol *fract);
