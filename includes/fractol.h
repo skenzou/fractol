@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/13 08:18:38 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/14 16:11:06 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,15 @@ typedef struct		s_image
 	int			endian;
 }					t_image;
 
+typedef struct s_thread_data
+{
+	struct s_fractol *fract;
+	int y;
+	int y_end;
+	int x;
+	int x_end;
+}							t_thread_data;
+
 typedef struct		s_fractol
 {
 					void		*mlx_ptr;
@@ -90,17 +99,11 @@ typedef struct		s_fractol
 					double			shapecte1;
 					double			shapecte2;
 					int					max_iter;
+					t_thread_data  tdata[8];
+					pthread_t				tids[8];
 					void		*(*thread)(void *dat);
 }									t_fractol;
 
-typedef struct s_thread_data
-{
-	t_fractol *fract;
-	int y;
-	int y_end;
-	int x;
-	int x_end;
-}							t_thread_data;
 
 void		create_image(t_fractol *fract);
 void			process(t_fractol *frac);
