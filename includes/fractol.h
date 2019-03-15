@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/14 16:11:06 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:35:43 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 # include <math.h>
 # include <fcntl.h>
 # include <pthread.h>
-# define WIN_WIDTH 600.0
-# define WIN_HEIGHT 600.0
+# define TNUM 32
+# define WIN_WIDTH 704
+# define WIN_HEIGHT 600
 # define DRAW_WIDTH 2000
 # define DRAW_HEIGHT 1300
 # define ESCAPE 53
@@ -62,6 +63,21 @@ typedef struct s_complex
 	double i;
 }						t_complex;
 
+typedef struct s_var
+{
+	double tempi;
+	double tempr;
+	double newi;
+	double newr;
+	double oldi;
+	double oldr;
+	double pr;
+	double pi;
+	int		x;
+	int		y;
+	int		i;
+}						t_var;
+
 typedef struct		s_point
 {
 	int				x;
@@ -79,37 +95,48 @@ typedef struct		s_image
 	int			endian;
 }					t_image;
 
-typedef struct s_thread_data
+typedef struct		s_thread_data
 {
-	struct s_fractol *fract;
-	int y;
-	int y_end;
-	int x;
-	int x_end;
-}							t_thread_data;
+	struct s_fractol	*f;
+	double				tempi;
+	double				tempr;
+	double				oldi;
+	double				oldr;
+	double				newi;
+	double				newr;
+	double				pi;
+	double				pr;
+	int					i;
+	int					x;
+	int					y;
+	int					y_s;
+	int					y_end;
+	int					x_s;
+	int					x_end;
+}					t_thread_data;
 
 typedef struct		s_fractol
 {
-					void		*mlx_ptr;
-					void		*win_ptr;
-					t_image		*img;
-					double			zoom;
-					double			xoffset;
-					double			yoffset;
-					double			shapecte1;
-					double			shapecte2;
-					int					max_iter;
-					t_thread_data  tdata[8];
-					pthread_t				tids[8];
-					void		*(*thread)(void *dat);
-}									t_fractol;
-
+	void			*mlx_ptr;
+	void			*win_ptr;
+	char			smooth;
+	t_image			*img;
+	double			zoom;
+	double			xoffset;
+	double			yoffset;
+	double			shapecte1;
+	double			shapecte2;
+	int				m_it;
+	t_thread_data	tdata[TNUM];
+	pthread_t		tids[TNUM];
+	void			*(*thread)(void *data);
+}					t_fractol;
 
 void		create_image(t_fractol *fract);
-void			process(t_fractol *frac);
-int				put_pixel_img(t_fractol *frac, t_point p, int border);
-void   launch_threads(t_fractol *fract);
-void        default_values(t_fractol *fract);
+void		process(t_fractol *frac);
+void		put_pixel_img(t_fractol *frac, int x, int y, int color);
+void		launch_threads(t_fractol *fract);
+void		default_values(t_fractol *fract);
 t_image		*create_image_test(t_fractol *fract);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/13 08:18:43 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/15 17:30:59 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ _IBLUE			=	\x1b[44m
 _IPURPLE		=	\x1b[45m
 _ICYAN			=	\x1b[46m
 _IWHITE			=	\x1b[47m
-_MAGENTA   = \x1b[35m
+_MAGENTA		=	\x1b[35m
 
 MSG				=	Compiling fractol
 .PHONY: all, $(NAME), clean, fclean, re
@@ -39,7 +39,7 @@ MSG				=	Compiling fractol
 NAME = fractol
 
 cc = gcc
-C_FLAGS = -Wall -Wextra -Werror
+C_FLAGS = -Wall -Wextra -Werror -pthread -Ofast
 
 MLX_PATH = ./minilibx
 MLX_LINK = -L $(MLX_PATH) -lmlx -framework OpenGL -framework AppKit

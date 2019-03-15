@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:24:02 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/14 16:11:08 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:39:05 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ static void   check_error(int argc, char **argv)
     exit(1);
   }
 }
-// percent = ft_percent(WIN_WIDTH / 2, x < WIN_WIDTH / 2 ? 0 : WIN_WIDTH, x);
-// fract->xoffset += x < WIN_WIDTH / 2 ? -1.5 * percent : 1.5 * percent;
-// percent = ft_percent(WIN_HEIGHT / 2, y < WIN_HEIGHT / 2 ? 0 : WIN_HEIGHT, y);
+
 static inline void			center(t_fractol *fract, int x, int y)
 {
 	double percent;
@@ -41,6 +39,7 @@ static inline void			center(t_fractol *fract, int x, int y)
 	fract->yoffset += y < WIN_HEIGHT / 2 ? -percent / fract->zoom
 					: percent / fract->zoom;
 }
+
 int				handle_mouse(int button, int x, int y, t_fractol *fract)
 {
 	if (x < 0 || x > WIN_WIDTH || y < 0 || y > WIN_HEIGHT)
@@ -65,279 +64,196 @@ int				handle_key(int keycode, t_fractol *fract)
 	(keycode == AKEY) && (fract->shapecte2 -= 0.01 / fract->zoom);
 	(keycode == WKEY) && (fract->shapecte1 += 0.01 / fract->zoom);
 	(keycode == SKEY) && (fract->shapecte1 -= 0.01 / fract->zoom);
-	(keycode == 18) && (fract->max_iter *= 2);
-	(keycode == 19) && (fract->max_iter > 2) && (fract->max_iter /= 2);
+	(keycode == 18) && (fract->m_it *= 2);
+	(keycode == 19) && (fract->m_it > 2) && (fract->m_it /= 2);
 	keycode == RKEY ? default_values(fract) : 0;
+	if (keycode == QKEY)
+		fract->smooth = fract->smooth ? 0 : 1;
 	process(fract);
 	return (1);
 }
 
-static inline int   get_rgb_smooth(int n, int iter_max)
+static inline int   get_col(int n, t_fractol *fract)
 {
-  register float t;
-  int r;
-  int g;
-  int b;
+	register float t;
+	int r;
+	int g;
+	int b;
 
-	// if (n % 4 == 0 && n < iter_max)
-	// 	return (0xFF3345);
-	// if (n % 3 == 0 && n < iter_max)
-	// 	return (0xAAbbaa);
-  t = (float)n / (float)iter_max;
-  r = (int)(9.0 * (1.0 - t) * t * t * t * 255.0);
-  g = (int)(15.0 * (1.0 - t) * (1.0 - t) * t * t * 255.0);
-  b = (int)(8.5 * (1.0 - t) * (1.0 - t) * (1.0 - t) * t * 255.0);
-  return ((r << 16) | (g << 8) | b);
+	if (n == fract->m_it)
+		return (0);
+	else if (!fract->smooth)
+		return (n * 0x453433);
+	t = (float)n / (float)fract->m_it;
+	r = (int)(9.0 * (1.0 - t) * t * t * t * 255.0);
+	g = (int)(15.0 * (1.0 - t) * (1.0 - t) * t * t * 255.0);
+	b = (int)(8.5 * (1.0 - t) * (1.0 - t) * (1.0 - t) * t * 255.0);
+	return ((r << 16) | (g << 8) | b);
 }
 
-void      *julia_thread(void *dat)
+void      *julia_thread(void *data)
 {
-  register t_complex new;
-  register t_complex old;
-  register int i;
-  register int x;
-  register int y;
-  register t_thread_data *data;
+	register t_var var;
+	register t_thread_data *d;
 
-  data = (t_thread_data *)dat;
-  y = data->y - 1;
-  while (++y < data->y_end && (x = data->x - 1))
-    while(++x < data->x_end && (i = -1))
-    {
-      new.r = 1.5 * ((double)x - WIN_WIDTH / 2.0) / (double)(0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
-      new.i = ((double)y - WIN_HEIGHT / 2.0) / (double)(0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
-      while (new.r * new.r + new.i * new.i < 4.0 && ++i < data->fract->max_iter)
-      {
-        old.r = new.r;
-        old.i = new.i;
-        new.r = old.r * old.r - old.i * old.i + data->fract->shapecte1;
-        new.i = 2 * old.r * old.i + data->fract->shapecte2;
-        if((new.r * new.r + new.i * new.i) > 4.0)
-              break;
-      }
-      put_pixel_img(data->fract,
-      (t_point){.x = x, .y = y, .color = get_rgb_smooth(i, data->fract->max_iter)}, 1);
-    }
-  return (0);
+	d = (t_thread_data *)data;
+	var.y = d->y - 1;
+	while (++var.y < d->y_end && (var.x = d->x - 1))
+		while(++var.x < d->x_end && (var.i = -1))
+		{
+			var.newr = 1.5 * (var.x - WIN_WIDTH / 2.0) /
+								(0.5 * d->f->zoom * WIN_WIDTH) + d->f->xoffset;
+			var.newi = (var.y - WIN_HEIGHT / 2.0) /
+								(0.5 * d->f->zoom * WIN_HEIGHT) + d->f->yoffset;
+			while (var.newr * var.newr + var.newi * var.newi < 4.0
+														&& ++var.i < d->f->m_it)
+			{
+				var.oldr = var.newr;
+				var.oldi = var.newi;
+				var.newr = var.oldr * var.oldr - var.oldi * var.oldi +
+															d->f->shapecte1;
+				var.newi = 2 * var.oldr * var.oldi + d->f->shapecte2;
+			}
+			put_pixel_img(d->f, var.x, var.y, get_col(var.i, d->f));
+		}
+	return (0);
 }
 
-static inline int        ft_opti(double x, double y)
-{
-    double x_square;
-    double y_square;
-
-    x_square = x * x;
-    y_square = y * y;
-    if (x_square + 2 * x + 1 + y_square <= 1 / 16)
-        return (0);
-    return (1);
-}
-
-void      *mandelbrot_thread(void *dat)
-{
-  register t_complex new;
-  register t_complex old;
-  register t_complex p;
-  register t_complex temp;
-  register int i;
-  register int x;
-  register int y;
-  register t_thread_data *data;
-
-  data = (t_thread_data *)dat;
-  y = data->y - 1;
-  while (++y < data->y_end && (x = data->x - 1))
-    while(++x < data->x_end && (i = -1))
-    {
-      p.r = 1.5 * (x - WIN_WIDTH / 2.0) / (0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
-      p.i = (y - WIN_HEIGHT / 2.0) / (0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
-      new.r = 0.0;
-      new.i = 0.0;
-	  if (!ft_opti(p.r, p.i))
-	  	i = data->fract->max_iter - 1;
-      while (new.r * new.r + new.i * new.i < 2.0 && ++i < data->fract->max_iter)
-      {
-        old.r = new.r;
-        temp.r = old.r * old.r - new.i * new.i + p.r;
-        temp.i = 2.0 * old.r * new.i + p.i;
-		if (temp.r == new.r && temp.i == new.i && (i = data->fract->max_iter))
-			break;
-		new.r = temp.r;
-		new.i = temp.i;
-      }
-	  	put_pixel_img(data->fract,
-      	(t_point){.x = x, .y = y, .color = get_rgb_smooth(i, data->fract->max_iter)}, 1);
-    }
-  return (0);
-}
-
-
-// void   launch_threads(t_fractol *fract)
+// void      *julia_thread(void *dat)
 // {
-//     // DUAL THREAD TEST
+//   register t_complex new;
+//   register t_complex old;
+//   register int i;
+//   register int x;
+//   register int y;
+//   register t_thread_data *data;
 //
-//     pthread_t tid1;
-//     pthread_t tid2;
-//
-//     pthread_attr_t attr1;
-//     pthread_attr_t attr2;
-//
-//     pthread_attr_init(&attr1);
-//     pthread_attr_init(&attr2);
-//
-//     pthread_create(&tid1, &attr1, fract->thread,
-//     &(t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 2, .fract = fract});
-//     pthread_create(&tid2, &attr2, fract->thread,
-//     &(t_thread_data){.x = WIN_WIDTH / 2, .y = 0, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract});
-//
-//     pthread_join(tid1, NULL);
-//     pthread_join(tid2, NULL);
-//
-//
-//
+//   data = (t_thread_data *)dat;
+//   y = data->y - 1;
+//   while (++y < data->y_end && (x = data->x - 1))
+//     while(++x < data->x_end && (i = -1))
+//     {
+//       new.r = 1.5 * (x - WIN_WIDTH / 2.0) / (0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
+//       new.i = (y - WIN_HEIGHT / 2.0) / (0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
+//       while (new.r * new.r + new.i * new.i < 4.0 && ++i < data->fract->max_iter)
+//       {
+//         old.r = new.r;
+//         old.i = new.i;
+//         new.r = old.r * old.r - old.i * old.i + data->fract->shapecte1;
+//         new.i = 2 * old.r * old.i + data->fract->shapecte2;
+//       }
+// 	  put_pixel_img(data->fract, x, y, get_rgb_smooth(i, data->fract->max_iter));
+// 		// if (i == data->fract->max_iter)
+// 		// 	put_pixel_img(data->fract, x, y, 0x0);
+// 		// else
+// 		// 	put_pixel_img(data->fract, x, y, i * 0xFF3345);
+//     }
+//   return (0);
 // }
 
-// void   launch_threads(t_fractol *fract)
+// void      *mandelbrot_thread(void *dat)
 // {
-//     // QUAD THREAD TEST
+//   register t_thread_data *data;
 //
-//     pthread_t tid1;
-//     pthread_t tid2;
-//     pthread_t tid3;
-//     pthread_t tid4;
-//     pthread_attr_t attr1;
-//     pthread_attr_t attr2;
-//     pthread_attr_t attr3;
-//     pthread_attr_t attr4;
-//
-//     pthread_attr_init(&attr1);
-//     pthread_attr_init(&attr2);
-//     pthread_attr_init(&attr3);
-//     pthread_attr_init(&attr4);
-//     pthread_create(&tid1, &attr1, fract->thread,
-//     &(t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH / 2, .fract = fract});
-//     pthread_create(&tid2, &attr2, fract->thread,
-//     &(t_thread_data){.x = WIN_WIDTH / 2, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH, .fract = fract});
-//     pthread_create(&tid3, &attr3, fract->thread,
-//     &(t_thread_data){.x = 0, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 2, .fract = fract});
-//     pthread_create(&tid4, &attr4, fract->thread,
-//     &(t_thread_data){.x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract});
-//
-//     pthread_join(tid1, NULL);
-//     pthread_join(tid2, NULL);
-//     pthread_join(tid3, NULL);
-//     pthread_join(tid4, NULL);
-//
-//
+//   data = (t_thread_data *)dat;
+//   data->y = data->y_s - 1;
+//   while (++data->y < data->y_end && (data->x = data->x_s - 1))
+//     while(++data->x < data->x_end && (data->i = -1))
+//     {
+//       data->pr = 1.5 * (data->x - WIN_WIDTH / 2.0) / (0.5 * data->fract->zoom * WIN_WIDTH) + data->fract->xoffset;
+//       data->pi = (data->y - WIN_HEIGHT / 2.0) / (0.5 * data->fract->zoom * WIN_HEIGHT) + data->fract->yoffset;
+//       data->newr = 0.0;
+//       data->newi = 0.0;
+//       while (data->newr * data->newr + data->newi * data->newi < 2.0 && ++data->i < data->fract->max_iter)
+//       {
+//         data->oldr = data->newr;
+//         data->tempr = data->oldr * data->oldr - data->newi * data->newi + data->pr;
+//         data->tempi = 2.0 * data->oldr * data->newi + data->pi;
+// 		if (data->tempr == data->newr && data->tempi == data->newi && (data->i = data->fract->max_iter))
+// 			break;
+// 		data->newr = data->tempr;
+// 		data->newi = data->tempi;
+//       }
+// 	 put_pixel_img(data->fract, data->x, data->y, get_rgb_smooth(data->i, data->fract->max_iter));
+//     }
+//   return (0);
 // }
+
+
+void      *mandelbrot_thread(void *data)
+{
+	register t_var var;
+	register t_thread_data *d;
+
+	d = (t_thread_data *)data;
+	var.y = d->y - 1;
+	while (++var.y < d->y_end && (var.x = d->x - 1))
+		while(++var.x < d->x_end && (var.i = -1))
+		{
+			var.pr = 1.5 * (var.x - WIN_WIDTH / 2.0) / (0.5 * d->f->zoom * WIN_WIDTH) + d->f->xoffset;
+			var.pi = (var.y - WIN_HEIGHT / 2.0) / (0.5 * d->f->zoom * WIN_HEIGHT) + d->f->yoffset;
+			var.newr = 0.0;
+			var.newi = 0.0;
+			while (var.newr * var.newr + var.newi * var.newi < 2.0 && ++var.i < d->f->m_it)
+			{
+				var.oldr = var.newr;
+				var.tempr = var.oldr * var.oldr - var.newi * var.newi + var.pr;
+				var.tempi = 2.0 * var.oldr * var.newi + var.pi;
+				if (var.tempr == var.newr && var.tempi == var.newi && (var.i = d->f->m_it))
+					break;
+				var.newr = var.tempr;
+				var.newi = var.tempi;
+			}
+			put_pixel_img(d->f, var.x, var.y, get_col(var.i, d->f));
+		}
+	return (0);
+}
 
 void	init_thread_data(t_fractol *fract)
 {
-	fract->tdata[0] = (t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT / 2,
-		.x_end = WIN_WIDTH / 4, .fract = fract};
-	fract->tdata[1] = (t_thread_data){.x = WIN_WIDTH / 4, .y = 0,
-		.y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH / 2, .fract = fract};
-	fract->tdata[2] = (t_thread_data){.x = WIN_WIDTH / 2, .y = 0,
-		.y_end = WIN_HEIGHT / 2, .x_end = (WIN_WIDTH * 3) / 4, .fract = fract};
-	fract->tdata[3] = (t_thread_data){.x = (WIN_WIDTH * 3) / 4, .y = 0,
-		.y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH, .fract = fract};
-	fract->tdata[4] = (t_thread_data){.x = 0, .y = WIN_HEIGHT / 2,
-		.y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 4, .fract = fract};
-	fract->tdata[5] = (t_thread_data){.x = WIN_WIDTH / 4, .y = WIN_HEIGHT / 2,
-		.y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 2, .fract = fract};
-	fract->tdata[6] = (t_thread_data){.x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2,
-		.y_end = WIN_HEIGHT, .x_end = (WIN_WIDTH * 3) / 4, .fract = fract};
-	fract->tdata[7] = (t_thread_data){.x = (WIN_WIDTH * 3) / 4, .y = WIN_HEIGHT / 2,
-		.y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract};
+	int i;
+	int x_s;
+	int x_end;
+
+	i = 0;
+	x_end = WIN_WIDTH / TNUM;
+	x_s = 0;
+	while (i < TNUM)
+	{
+		fract->tdata[i++] = (t_thread_data){.x = x_s, .y = 0, .y_end = WIN_HEIGHT,
+			.x_end = x_end, .f = fract};
+		x_s += (WIN_WIDTH / TNUM);
+		x_end += (WIN_WIDTH / TNUM);
+	}
 }
 
  void 	launch_threads(t_fractol *fract)
  {
 	//mandelbrot_thread(&(t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract});
 	pthread_attr_t attr;
+	int i;
 
+	i = 0;
 	pthread_attr_init(&attr);
-	pthread_create(&(fract->tids[0]), &attr, fract->thread, &fract->tdata[0]);
-	pthread_create(&(fract->tids[1]), &attr, fract->thread, &fract->tdata[1]);
-	pthread_create(&(fract->tids[2]), &attr, fract->thread, &fract->tdata[2]);
-	pthread_create(&(fract->tids[3]), &attr, fract->thread, &fract->tdata[3]);
-	pthread_create(&(fract->tids[4]), &attr, fract->thread, &fract->tdata[4]);
-	pthread_create(&(fract->tids[5]), &attr, fract->thread, &fract->tdata[5]);
-	pthread_create(&(fract->tids[6]), &attr, fract->thread, &fract->tdata[6]);
-	pthread_create(&(fract->tids[7]), &attr, fract->thread, &fract->tdata[7]);
-	pthread_join(fract->tids[0], NULL);
-	pthread_join(fract->tids[1], NULL);
-	pthread_join(fract->tids[2], NULL);
-	pthread_join(fract->tids[3], NULL);
-	pthread_join(fract->tids[4], NULL);
-	pthread_join(fract->tids[5], NULL);
-	pthread_join(fract->tids[6], NULL);
-	pthread_join(fract->tids[7], NULL);
+	while (i < TNUM)
+	{
+		pthread_create(&(fract->tids[i]), &attr, fract->thread, &fract->tdata[i]);
+		i++;
+	}
+	i = 0;
+	while (i < TNUM)
+		pthread_join(fract->tids[i++], NULL);
 }
-// void   launch_threads(t_fractol *fract)
-// {
-//    //mandelbrot_thread(&(t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract});
-//    pthread_t tid1;
-//    pthread_t tid2;
-//    pthread_t tid3;
-//    pthread_t tid4;
-//    pthread_t tid5;
-//    pthread_t tid6;
-//    pthread_t tid7;
-//    pthread_t tid8;
-//    pthread_attr_t attr1;
-//    pthread_attr_t attr2;
-//    pthread_attr_t attr3;
-//    pthread_attr_t attr4;
-//    pthread_attr_t attr5;
-//    pthread_attr_t attr6;
-//    pthread_attr_t attr7;
-//    pthread_attr_t attr8;
-//
-//    pthread_attr_init(&attr1);
-//    pthread_attr_init(&attr2);
-//    pthread_attr_init(&attr3);
-//    pthread_attr_init(&attr4);
-//    pthread_attr_init(&attr5);
-//    pthread_attr_init(&attr6);
-//    pthread_attr_init(&attr7);
-//    pthread_attr_init(&attr8);
-//    pthread_create(&tid1, &attr1, fract->thread,
-//    &(t_thread_data){.x = 0, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH / 4, .fract = fract});
-//    pthread_create(&tid2, &attr2, fract->thread,
-//    &(t_thread_data){.x = WIN_WIDTH / 4, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH / 2, .fract = fract});
-//    pthread_create(&tid3, &attr3, fract->thread,
-//    &(t_thread_data){.x = WIN_WIDTH / 2, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = (WIN_WIDTH * 3) / 4, .fract = fract});
-//    pthread_create(&tid4, &attr4, fract->thread,
-//    &(t_thread_data){.x = (WIN_WIDTH * 3) / 4, .y = 0, .y_end = WIN_HEIGHT / 2, .x_end = WIN_WIDTH, .fract = fract});
-//    pthread_create(&tid5, &attr5, fract->thread,
-//    &(t_thread_data){.x = 0, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 4, .fract = fract});
-//    pthread_create(&tid6, &attr6, fract->thread,
-//    &(t_thread_data){.x = WIN_WIDTH / 4, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH / 2, .fract = fract});
-//    pthread_create(&tid7, &attr7, fract->thread,
-//    &(t_thread_data){.x = WIN_WIDTH / 2, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = (WIN_WIDTH * 3) / 4, .fract = fract});
-//    pthread_create(&tid8, &attr8, fract->thread,
-//    &(t_thread_data){.x = (WIN_WIDTH * 3) / 4, .y = WIN_HEIGHT / 2, .y_end = WIN_HEIGHT, .x_end = WIN_WIDTH, .fract = fract});
-//
-//    pthread_join(tid1, NULL);
-//    pthread_join(tid2, NULL);
-//    pthread_join(tid3, NULL);
-//    pthread_join(tid4, NULL);
-//    pthread_join(tid5, NULL);
-//    pthread_join(tid6, NULL);
-//    pthread_join(tid7, NULL);
-//    pthread_join(tid8, NULL);
-//
-// }
 
 void        default_values(t_fractol *fract)
 {
   fract->shapecte1 = -0.7;
   fract->shapecte2 = 0.27015;
-  fract->max_iter = 125;
+  fract->m_it = 125;
   fract->zoom = 1.0;
   fract->xoffset = 0.0;
   fract->yoffset = 0.0;
+  fract->smooth = 1;
 }
 
 t_fractol   *init_fract(char *name)
@@ -362,7 +278,7 @@ t_fractol   *init_fract(char *name)
 	mlx_key_hook(fract->win_ptr, &handle_key, fract);
 	mlx_mouse_hook(fract->win_ptr, &handle_mouse, fract);
 	default_values(fract);
-  init_thread_data(fract);
+	init_thread_data(fract);
 	create_image(fract);
 	return (fract);
 }
