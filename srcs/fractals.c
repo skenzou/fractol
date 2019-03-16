@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:54:50 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 13:49:24 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 16:10:35 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline int		get_color(int n, t_fractol *fract)
 	if (n == fract->m_it)
 		return (0);
 	else if (!fract->smooth)
-		return (n * 0x453433);
+		return (n * 0xFFbb45);
 	t = (float)n / (float)fract->m_it;
 	r = (int)(9.0 * (1.0 - t) * t * t * t * 255.0);
 	g = (int)(15.0 * (1.0 - t) * (1.0 - t) * t * t * 255.0);
