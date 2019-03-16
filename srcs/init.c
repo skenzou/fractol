@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:17:27 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 13:39:29 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:41:41 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void			default_values(t_fractol *fract)
 {
 	fract->shapecte1 = -0.7;
 	fract->shapecte2 = 0.27015;
-	fract->m_it = 125;
+	fract->m_it = 60;
 	fract->zoom = 1;
 	fract->xoffset = 0.0;
 	fract->yoffset = 0.0;
@@ -43,13 +43,13 @@ void			default_values(t_fractol *fract)
 	(fract->thread == &mandelbrot_thread) && (fract->rmax = 0.6);
 	(fract->thread == &mandelbrot_thread) && (fract->imin = -1.2);
 	(fract->thread == &mandelbrot_thread) && (fract->imax = 1.2);
-	(fract->thread == &julia_thread ||
+	(fract->thread == &julia_thread || fract->thread == &tricorn_thread ||
 		fract->thread == &burningship_thread) && (fract->rmin = -2.5);
-	(fract->thread == &julia_thread ||
+	(fract->thread == &julia_thread || fract->thread == &tricorn_thread ||
 		fract->thread == &burningship_thread) && (fract->rmax = 1.0);
-	(fract->thread == &julia_thread ||
+	(fract->thread == &julia_thread || fract->thread == &tricorn_thread ||
 		fract->thread == &burningship_thread) && (fract->imin = -1.0);
-	(fract->thread == &julia_thread ||
+	(fract->thread == &julia_thread || fract->thread == &tricorn_thread ||
 		fract->thread == &burningship_thread) && (fract->imax = 1.0);
 }
 
@@ -74,6 +74,8 @@ t_fractol		*init_fract(char *name)
 		fract->thread = &julia_thread;
 	if (!ft_strcmp(name, "Burningship"))
 		fract->thread = &burningship_thread;
+	if (!ft_strcmp(name, "Tricorn"))
+		fract->thread = &tricorn_thread;
 	mlx_key_hook(fract->win_ptr, &handle_key, fract);
 	mlx_mouse_hook(fract->win_ptr, &handle_mouse, fract);
 	default_values(fract);

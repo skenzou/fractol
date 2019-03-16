@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:54:50 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 16:10:35 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:40:58 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,45 @@ void					*burningship_thread(void *data)
 		while (++var.x < d->x_end && (var.i = -1))
 		{
 			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
-											+ d->f->rmin + d->f->xoffset;
+											+ d->f->rmin + 0.4 + d->f->xoffset;
 			var.pi = (double)var.y / (WIN_H / (d->f->imax - d->f->imin))
-											+ d->f->imin - 0.37 + d->f->yoffset;
+											+ d->f->imin - 0.47 + d->f->yoffset;
 			var.newr = var.pr;
 			var.newi = var.pi;
-			while (var.newr * var.newr + var.newi * var.newi <= 65535
+			while (var.newr * var.newr + var.newi * var.newi < 16.0
 														&& ++var.i < d->f->m_it)
 			{
-				var.tempr = var.newr * var.newr + var.newi * var.newi + var.pr;
-				var.newi = abs_double(-2.0 * var.newr * var.newi) + var.pi;
+				var.tempr = var.newr * var.newr - var.newi * var.newi + var.pr;
+				var.newi = abs_double(2.0 * var.newr * var.newi) + var.pi;
 				var.newr = abs_double(var.tempr);
+			}
+			put_pixel_img(d->f, var.x, var.y, get_color(var.i, d->f));
+		}
+	return (0);
+}
+
+void					*tricorn_thread(void *data)
+{
+	register t_var			var;
+	register t_thread_data	*d;
+
+	d = (t_thread_data *)data;
+	var.y = d->y - 1;
+	while (++var.y < d->y_end && (var.x = d->x - 1))
+		while (++var.x < d->x_end && (var.i = -1))
+		{
+			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
+											+ d->f->rmin + 0.4 + d->f->xoffset;
+			var.pi = (double)var.y / ((WIN_H * 0.8) / (d->f->imax - d->f->imin))
+											+ d->f->imin - 0.23 + d->f->yoffset;
+			var.newr = var.pr;
+			var.newi = var.pi;
+			while (var.newr * var.newr + var.newi * var.newi < 16.0
+														&& ++var.i < d->f->m_it)
+			{
+				var.tempr = var.newr * var.newr - var.newi * var.newi + var.pr;
+				var.newi = -2.0 * var.newr * var.newi + var.pi;
+				var.newr = var.tempr;
 			}
 			put_pixel_img(d->f, var.x, var.y, get_color(var.i, d->f));
 		}
@@ -74,12 +102,12 @@ void					*mandelbrot_thread(void *data)
 		while (++var.x < d->x_end && (var.i = -1))
 		{
 			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
-												+ d->f->rmin + d->f->xoffset;
+												+ d->f->rmin + 0.3 + d->f->xoffset;
 			var.pi = (double)var.y / (WIN_H / (d->f->imax - d->f->imin))
 												+ d->f->imin + d->f->yoffset;
 			var.newr = 0.0;
 			var.newi = 0.0;
-			while (var.newr * var.newr + var.newi * var.newi < 2.0
+			while (var.newr * var.newr + var.newi * var.newi < 16.0
 														&& ++var.i < d->f->m_it)
 			{
 				var.oldr = var.newr;
@@ -110,7 +138,7 @@ void					*julia_thread(void *data)
 										+ d->f->rmin + 0.755 + d->f->xoffset;
 			var.newi = (double)var.y / (WIN_H / (d->f->imax - d->f->imin))
 												+ d->f->imin + d->f->yoffset;
-			while (var.newr * var.newr + var.newi * var.newi < 4.0
+			while (var.newr * var.newr + var.newi * var.newi < 16.0
 														&& ++var.i < d->f->m_it)
 			{
 				var.oldr = var.newr;

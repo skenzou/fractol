@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 13:45:56 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:41:45 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void				put_pixel_img(t_fractol *frac, int x, int y, int color);
 void				*julia_thread(void *data);
 void				*mandelbrot_thread(void *data);
 void				*burningship_thread(void *data);
+void				*tricorn_thread(void *data);
 
 void				launch_threads(t_fractol *fract);
 

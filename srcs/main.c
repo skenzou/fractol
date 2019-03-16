@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:46:58 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 13:53:28 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:41:44 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@
 static void   check_error(int argc, char **argv)
 {
 	if (argc != 2 || (ft_strcmp(argv[1], "Julia")
-	&& ft_strcmp(argv[1], "Burningship") && ft_strcmp(argv[1], "Mandelbrot")))
+	&& ft_strcmp(argv[1], "Burningship") && ft_strcmp(argv[1], "Mandelbrot")
+  && ft_strcmp(argv[1], "Tricorn")))
 	{
 		ft_putendl_fd(ANSI_BOLD ANSI_RED "usage: ./fractol <fractol_name>"
 		ANSI_RESET, 2);
@@ -53,6 +54,7 @@ static void   check_error(int argc, char **argv)
 		ft_putendl_fd(ANSI_BOLD ANSI_BLUE "--> Mandelbrot" ANSI_RESET, 2);
 		ft_putendl_fd(ANSI_BOLD ANSI_MAGENTA "--> Julia" ANSI_RESET, 2);
 		ft_putendl_fd(ANSI_BOLD ANSI_YELLOW "--> Burningship" ANSI_RESET, 2);
+    ft_putendl_fd(ANSI_BOLD ANSI_GREEN "--> Tricorn" ANSI_RESET, 2);
 		exit(1);
 	}
 }
