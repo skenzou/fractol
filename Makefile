@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/15 17:30:59 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/16 13:42:19 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ LFT_PATH = ./libft/
 INC_PATH = ./includes
 SRC_PATH = ./srcs/
 
-SRC_NAME = fractol.c image.c
+SRC_NAME = main.c image.c events.c fractals.c init.c
 OBJ_NAME = $(SRC_NAME:.c=.o)
 INC_NAME = fractol.h
 
@@ -75,7 +75,7 @@ $(NAME): $(LIBFT_PATH)$(LIBFT_NAME) $(OBJ)
 		@printf "$(_BOLD)$(_CYAN)fractols:\n$(_RESET)"
 		@printf "$(_BOLD)$(_BLUE)--> Mandelbrot\n$(_RESET)"
 		@printf "$(_BOLD)$(_MAGENTA)--> Julia\n$(_RESET)"
-		@printf "$(_BOLD)$(_YELLOW)--> Turtle\n$(_RESET)"
+		@printf "$(_BOLD)$(_YELLOW)--> Burningship\n$(_RESET)"
 
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c

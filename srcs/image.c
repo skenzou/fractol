@@ -6,18 +6,18 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/27 03:50:36 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:50:59 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/16 13:36:29 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-inline 	void		put_pixel_img(t_fractol *frac, int x, int y, int color)
+inline void		put_pixel_img(t_fractol *frac, int x, int y, int color)
 {
 	int offset;
 
-	offset = ((x + y * WIN_WIDTH) * frac->img->bpp);
-	if (x < WIN_WIDTH && x > 0 && y < WIN_HEIGHT && y > 0)
+	offset = ((x + y * WIN_W) * frac->img->bpp);
+	if (x < WIN_W && x > 0 && y < WIN_H && y > 0)
 	{
 		frac->img->data[offset] = color & 0xFF;
 		frac->img->data[offset + 1] = (color >> 8) & 0xFF;
@@ -25,9 +25,9 @@ inline 	void		put_pixel_img(t_fractol *frac, int x, int y, int color)
 	}
 }
 
-void		create_image(t_fractol *fract)
+void			create_image(t_fractol *fract)
 {
-	fract->img->ptr = mlx_new_image(fract->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	fract->img->ptr = mlx_new_image(fract->mlx_ptr, WIN_W, WIN_H);
 	if (!(fract->img->ptr))
 		exit(1);
 	fract->img->data = mlx_get_data_addr(fract->img->ptr,
@@ -37,7 +37,7 @@ void		create_image(t_fractol *fract)
 
 void			process(t_fractol *fract)
 {
-	// mlx_clear_window(fract->mlx_ptr, fract->win_ptr);
 	launch_threads(fract);
-	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr, 0, 0);
+	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr,
+																		0, 0);
 }

@@ -1,0 +1,60 @@
+srcs/events.c:		fract->zoom *= ZOOMFACTOR;
+srcs/events.c:		fract->zoom *= ZOOMFACTOR;
+srcs/events.c:	(keycode == RIGHTARROW) && (fract->xoffset += 0.1 / fract->zoom);
+srcs/events.c:	(keycode == LEFTARROW) && (fract->xoffset -= 0.1 / fract->zoom);
+srcs/events.c:	(keycode == UPARROW) && (fract->yoffset -= 0.1 / fract->zoom);
+srcs/events.c:	(keycode == DOWNARROW) && (fract->yoffset += 0.1 / fract->zoom);
+srcs/events.c:	(keycode == DKEY) && (fract->shapecte2 += 0.01 / fract->zoom);
+srcs/events.c:	(keycode == AKEY) && (fract->shapecte2 -= 0.01 / fract->zoom);
+srcs/events.c:	(keycode == WKEY) && (fract->shapecte1 += 0.01 / fract->zoom);
+srcs/events.c:	(keycode == SKEY) && (fract->shapecte1 -= 0.01 / fract->zoom);
+srcs/events.c:	(keycode == 18) && (fract->m_it *= 2);
+srcs/events.c:	(keycode == 19) && (fract->m_it > 2) && (fract->m_it /= 2);
+srcs/events.c:		fract->smooth = fract->smooth ? 0 : 1;
+srcs/fractals.c:	if (n == fract->m_it)
+srcs/fractals.c:	else if (!fract->smooth)
+srcs/fractals.c:	t = (float)n / (float)fract->m_it;
+srcs/fractol.c:// 	fract->xoffset += x < WIN_W / 2 ? (-1.5 * percent) / fract->zoom
+srcs/fractol.c:// 					: (1.5 * percent) / fract->zoom;
+srcs/fractol.c:// 	fract->yoffset += y < WIN_H / 2 ? -percent / fract->zoom
+srcs/fractol.c:// 					: percent / fract->zoom;
+srcs/fractol.c:		pthread_create(&(fract->tids[i]), &attr, fract->thread, &fract->tdata[i]);
+srcs/fractol.c:		pthread_join(fract->tids[i++], NULL);
+srcs/fractol.c:  mlx_loop(fract->mlx_ptr);
+srcs/image.c:	fract->img->ptr = mlx_new_image(fract->mlx_ptr, WIN_W, WIN_H);
+srcs/image.c:	if (!(fract->img->ptr))
+srcs/image.c:	fract->img->data = mlx_get_data_addr(fract->img->ptr,
+srcs/image.c:			&fract->img->bpp, &fract->img->sizeline, &fract->img->endian);
+srcs/image.c:	fract->img->bpp /= 8;
+srcs/image.c:	// mlx_clear_window(fract->mlx_ptr, fract->win_ptr);
+srcs/image.c:	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr, 0, 0);
+srcs/init.c:		fract->tdata[i++] = (t_thread_data){.x = x_s, .y = 0, .y_end = WIN_H,
+srcs/init.c:	fract->shapecte1 = -0.7;
+srcs/init.c:	fract->shapecte2 = 0.27015;
+srcs/init.c:	fract->m_it = 125;
+srcs/init.c:	fract->xoffset = 0.0;
+srcs/init.c:	fract->yoffset = 0.0;
+srcs/init.c:	fract->smooth = 1;
+srcs/init.c:	(fract->thread == &mandelbrot_thread) && (fract->rmin = -2.5);
+srcs/init.c:	(fract->thread == &mandelbrot_thread) && (fract->rmax = 0.6);
+srcs/init.c:	(fract->thread == &mandelbrot_thread) && (fract->imin = -1.2);
+srcs/init.c:	(fract->thread == &mandelbrot_thread) && (fract->imax = 1.2);
+srcs/init.c:	(fract->thread == &julia_thread ||
+srcs/init.c:		fract->thread == &burningship_thread) && (fract->rmin = -2.5);
+srcs/init.c:	(fract->thread == &julia_thread ||
+srcs/init.c:		fract->thread == &burningship_thread) && (fract->rmax = 1.0);
+srcs/init.c:	(fract->thread == &julia_thread ||
+srcs/init.c:		fract->thread == &burningship_thread) && (fract->imin = -1.0);
+srcs/init.c:	(fract->thread == &julia_thread ||
+srcs/init.c:		fract->thread == &burningship_thread) && (fract->imax = 1.0);
+srcs/init.c:	if (!(fract->mlx_ptr = mlx_init()))
+srcs/init.c:	fract->win_ptr =
+srcs/init.c:		mlx_new_window(fract->mlx_ptr, WIN_W, WIN_H, "Fractol");
+srcs/init.c:	if (!(fract->img = (t_image *)malloc(sizeof(t_image))))
+srcs/init.c:	fract->img->ptr = NULL;
+srcs/init.c:	if (!fract->win_ptr)
+srcs/init.c:		fract->thread = &mandelbrot_thread;
+srcs/init.c:		fract->thread = &julia_thread;
+srcs/init.c:		fract->thread = &burningship_thread;
+srcs/init.c:	mlx_key_hook(fract->win_ptr, &handle_key, fract);
+srcs/init.c:	mlx_mouse_hook(fract->win_ptr, &handle_mouse, fract);
