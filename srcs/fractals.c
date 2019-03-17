@@ -6,13 +6,13 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:54:50 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:40:58 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 15:16:19 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static inline int		get_color(int n, t_fractol *fract)
+int						get_color(int n, t_fractol *fract)
 {
 	register float	t;
 	register int	r;
@@ -30,39 +30,6 @@ static inline int		get_color(int n, t_fractol *fract)
 	return ((r << 16) | (g << 8) | b);
 }
 
-static inline double	abs_double(double nb)
-{
-	return (nb < 0 ? -nb : nb);
-}
-
-void					*burningship_thread(void *data)
-{
-	register t_var			var;
-	register t_thread_data	*d;
-
-	d = (t_thread_data *)data;
-	var.y = d->y - 1;
-	while (++var.y < d->y_end && (var.x = d->x - 1))
-		while (++var.x < d->x_end && (var.i = -1))
-		{
-			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
-											+ d->f->rmin + 0.4 + d->f->xoffset;
-			var.pi = (double)var.y / (WIN_H / (d->f->imax - d->f->imin))
-											+ d->f->imin - 0.47 + d->f->yoffset;
-			var.newr = var.pr;
-			var.newi = var.pi;
-			while (var.newr * var.newr + var.newi * var.newi < 16.0
-														&& ++var.i < d->f->m_it)
-			{
-				var.tempr = var.newr * var.newr - var.newi * var.newi + var.pr;
-				var.newi = abs_double(2.0 * var.newr * var.newi) + var.pi;
-				var.newr = abs_double(var.tempr);
-			}
-			put_pixel_img(d->f, var.x, var.y, get_color(var.i, d->f));
-		}
-	return (0);
-}
-
 void					*tricorn_thread(void *data)
 {
 	register t_var			var;
@@ -75,7 +42,7 @@ void					*tricorn_thread(void *data)
 		{
 			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
 											+ d->f->rmin + 0.4 + d->f->xoffset;
-			var.pi = (double)var.y / ((WIN_H * 0.8) / (d->f->imax - d->f->imin))
+			var.pi = (double)var.y / ((WIN_H) * 0.8 / (d->f->imax - d->f->imin))
 											+ d->f->imin - 0.23 + d->f->yoffset;
 			var.newr = var.pr;
 			var.newi = var.pi;
@@ -91,9 +58,25 @@ void					*tricorn_thread(void *data)
 	return (0);
 }
 
+static inline void		mandelbrot_loop(t_var *var, int maxiter)
+{
+	while (var->newr * var->newr + var->newi * var->newi < 16.0
+												&& ++var->i < maxiter)
+	{
+		var->oldr = var->newr;
+		var->tempr = var->oldr * var->oldr - var->newi * var->newi + var->pr;
+		var->tempi = 2.0 * var->oldr * var->newi + var->pi;
+		if (var->tempr == var->newr && var->tempi == var->newi &&
+												(var->i = maxiter))
+			break ;
+		var->newr = var->tempr;
+		var->newi = var->tempi;
+	}
+}
+
 void					*mandelbrot_thread(void *data)
 {
-	register t_var			var;
+	t_var					var;
 	register t_thread_data	*d;
 
 	d = (t_thread_data *)data;
@@ -102,23 +85,12 @@ void					*mandelbrot_thread(void *data)
 		while (++var.x < d->x_end && (var.i = -1))
 		{
 			var.pr = (double)var.x / (WIN_W / (d->f->rmax - d->f->rmin))
-												+ d->f->rmin + 0.3 + d->f->xoffset;
+											+ d->f->rmin + 0.3 + d->f->xoffset;
 			var.pi = (double)var.y / (WIN_H / (d->f->imax - d->f->imin))
 												+ d->f->imin + d->f->yoffset;
 			var.newr = 0.0;
 			var.newi = 0.0;
-			while (var.newr * var.newr + var.newi * var.newi < 16.0
-														&& ++var.i < d->f->m_it)
-			{
-				var.oldr = var.newr;
-				var.tempr = var.oldr * var.oldr - var.newi * var.newi + var.pr;
-				var.tempi = 2.0 * var.oldr * var.newi + var.pi;
-				if (var.tempr == var.newr && var.tempi == var.newi &&
-														(var.i = d->f->m_it))
-					break ;
-				var.newr = var.tempr;
-				var.newi = var.tempi;
-			}
+			mandelbrot_loop(&var, d->f->m_it);
 			put_pixel_img(d->f, var.x, var.y, get_color(var.i, d->f));
 		}
 	return (0);

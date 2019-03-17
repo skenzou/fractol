@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:44:08 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 13:42:26 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 15:21:21 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,23 @@ int						handle_mouse(int button, int x, int y, t_fractol *fract)
 int						handle_key(int keycode, t_fractol *fract)
 {
 	keycode == ESCAPE ? exit(0) : 0;
-	(keycode == RIGHTARROW) && (fract->xoffset += 0.1 / fract->zoom);
-	(keycode == LEFTARROW) && (fract->xoffset -= 0.1 / fract->zoom);
-	(keycode == UPARROW) && (fract->yoffset -= 0.1 / fract->zoom);
-	(keycode == DOWNARROW) && (fract->yoffset += 0.1 / fract->zoom);
-	(keycode == DKEY) && (fract->shapecte2 += 0.01 / fract->zoom);
-	(keycode == AKEY) && (fract->shapecte2 -= 0.01 / fract->zoom);
-	(keycode == WKEY) && (fract->shapecte1 += 0.01 / fract->zoom);
-	(keycode == SKEY) && (fract->shapecte1 -= 0.01 / fract->zoom);
-	(keycode == 18) && (fract->m_it *= 2);
-	(keycode == 19) && (fract->m_it > 2) && (fract->m_it /= 2);
+	(keycode == RIGHTARROW) && (fract->xoffset -= 0.1 / fract->zoom);
+	(keycode == LEFTARROW) && (fract->xoffset += 0.1 / fract->zoom);
+	(keycode == UPARROW) && (fract->yoffset += 0.1 / fract->zoom);
+	(keycode == DOWNARROW) && (fract->yoffset -= 0.1 / fract->zoom);
+	(keycode == WKEY || keycode == PLUS) && (fract->m_it += 30);
+	(keycode == SKEY || keycode == MINUS) && (fract->m_it > 30)
+														&& (fract->m_it -= 30);
+	if (keycode > 17 && keycode < 22)
+	{
+		(keycode == 18) && (fract->thread = &mandelbrot_thread);
+		(keycode == 19) && (fract->thread = &julia_thread);
+		(keycode == 20) && (fract->thread = &burningship_thread);
+		(keycode == 21) && (fract->thread = &tricorn_thread);
+		default_values(fract);
+	}
 	keycode == RKEY ? default_values(fract) : 0;
-	if (keycode == QKEY)
+	if (keycode == SPACE)
 		fract->smooth = fract->smooth ? 0 : 1;
 	process(fract);
 	return (1);

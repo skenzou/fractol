@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:41:45 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 15:23:02 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@
 # include <pthread.h>
 # define TNUM			32
 # define ZOOMFACTOR		1.11
-# define WIN_W			704
-# define WIN_H			600
-# define DRAW_WIDTH		2000
-# define DRAW_HEIGHT	1300
+# define WIN_W			1216
+# define WIN_H			900
 # define ESCAPE			53
 # define UPARROW		126
 # define DOWNARROW		125
@@ -50,6 +48,7 @@
 # define ANSI_CYAN		"\x1b[36m"
 # define ANSI_RESET		"\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
+# define LIGHTRED		0xff0080
 
 typedef struct		s_var
 {
@@ -65,14 +64,6 @@ typedef struct		s_var
 	int			y;
 	int			i;
 }					t_var;
-
-typedef struct		s_point
-{
-	int				x;
-	int				y;
-	int				color;
-	int				border;
-}					t_point;
 
 typedef struct		s_image
 {
@@ -127,16 +118,17 @@ typedef struct		s_fractol
 void				create_image(t_fractol *fract);
 void				process(t_fractol *frac);
 void				put_pixel_img(t_fractol *frac, int x, int y, int color);
+int					get_color(int n, t_fractol *fract);
 
 void				*julia_thread(void *data);
 void				*mandelbrot_thread(void *data);
 void				*burningship_thread(void *data);
 void				*tricorn_thread(void *data);
 
-void				launch_threads(t_fractol *fract);
-
 void				default_values(t_fractol *fract);
 t_fractol			*init_fract(char *name);
+
+void				put_legend(t_fractol *fract);
 
 int					handle_mouse(int button, int x, int y, t_fractol *fract);
 int					handle_key(int keycode, t_fractol *fract);
