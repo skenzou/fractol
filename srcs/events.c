@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:44:08 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 15:21:21 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 16:32:24 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,18 @@ static inline void		zoom(t_fractol *f, int x, int y, double zoomfactor)
 	f->imin = interpolate(imouse, f->imin, interpolation);
 	f->rmax = interpolate(rmouse, f->rmax, interpolation);
 	f->imax = interpolate(imouse, f->imax, interpolation);
+}
+
+int						julia_mouse(int x, int y, t_fractol *fract)
+{
+	if (fract->thread == &julia_thread && x > 0 && x < WIN_W && y > 0
+											&& y < WIN_H && !fract->lockjulia)
+	{
+		fract->shapecte1 = -2.5 + ((double)x / WIN_W) * 3.5;
+		fract->shapecte2 = -1.0 + ((double)y / WIN_H) * 2.0;
+		process(fract);
+	}
+	return (1);
 }
 
 int						handle_mouse(int button, int x, int y, t_fractol *fract)
@@ -68,6 +80,8 @@ int						handle_key(int keycode, t_fractol *fract)
 		(keycode == 21) && (fract->thread = &tricorn_thread);
 		default_values(fract);
 	}
+	if (keycode == QKEY)
+		fract->lockjulia = fract->lockjulia ? 0 : 1;
 	keycode == RKEY ? default_values(fract) : 0;
 	if (keycode == SPACE)
 		fract->smooth = fract->smooth ? 0 : 1;

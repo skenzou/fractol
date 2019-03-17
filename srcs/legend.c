@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 14:02:35 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 14:16:18 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 16:37:30 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static void		put_legend_rest(t_fractol *fract)
 	"W or +                - increase iterations");
 	mlx_string_put(fract->mlx_ptr, fract->win_ptr, WIN_W + 10, 530, LIGHTRED,
 	"S or -                - decrease iterations");
+	mlx_string_put(fract->mlx_ptr, fract->win_ptr, WIN_W + 10, 570, LIGHTRED,
+	"Q                     - lock/unlock Julia");
 }
 
 void			put_legend(t_fractol *fract)

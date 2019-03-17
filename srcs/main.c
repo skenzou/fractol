@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:46:58 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 15:16:00 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:42:05 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,13 @@ static void		check_error(int argc, char **argv)
 	&& ft_strcmp(argv[1], "Burningship") && ft_strcmp(argv[1], "Mandelbrot")
 	&& ft_strcmp(argv[1], "Tricorn")))
 	{
-		ft_putendl_fd("usage: ./fractol <fractol_name>", 2);
-		ft_putendl_fd("fractols:", 2);
-		ft_putendl_fd("--> Mandelbrot", 2);
-		ft_putendl_fd("--> Julia", 2);
-		ft_putendl_fd("--> Burningship", 2);
-		ft_putendl_fd("--> Tricorn", 2);
+		ft_putendl_fd(ANSI_RED "usage: ./fractol <fractol_name>"
+		ANSI_RESET, 2);
+		ft_putendl_fd(ANSI_CYAN "fractols:" ANSI_RESET, 2);
+		ft_putendl_fd(ANSI_BLUE "--> Mandelbrot" ANSI_RESET, 2);
+		ft_putendl_fd(ANSI_MAGENTA "--> Julia" ANSI_RESET, 2);
+		ft_putendl_fd(ANSI_YELLOW "--> Burningship" ANSI_RESET, 2);
+		ft_putendl_fd(ANSI_GREEN "--> Tricorn" ANSI_RESET, 2);
 		exit(1);
 	}
 }

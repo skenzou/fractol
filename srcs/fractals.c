@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:54:50 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 15:16:19 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:09:53 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,9 @@ void					*julia_thread(void *data)
 														&& ++var.i < d->f->m_it)
 			{
 				var.oldr = var.newr;
-				var.oldi = var.newi;
-				var.newr = var.oldr * var.oldr - var.oldi * var.oldi +
+				var.newr = var.oldr * var.oldr - var.newi * var.newi +
 															d->f->shapecte1;
-				var.newi = 2 * var.oldr * var.oldi + d->f->shapecte2;
+				var.newi = 2 * var.oldr * var.newi + d->f->shapecte2;
 			}
 			put_pixel_img(d->f, var.x, var.y, get_color(var.i, d->f));
 		}

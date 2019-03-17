@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 15:23:02 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:42:55 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@
 # define SPACE			49
 # define RKEY			15
 # define PALETTERADIUS	100
-# define ANSI_RED		"\x1b[31m"
-# define ANSI_GREEN		"\x1b[32m"
-# define ANSI_YELLOW	"\x1b[33m"
-# define ANSI_BLUE		"\x1b[34m"
-# define ANSI_MAGENTA	"\x1b[35m"
-# define ANSI_CYAN		"\x1b[36m"
-# define ANSI_RESET		"\x1b[0m"
+# define ANSI_RED		"\x1b[1m\x1b[31m"
+# define ANSI_GREEN		"\x1b[1m\x1b[32m"
+# define ANSI_YELLOW	"\x1b[1m\x1b[33m"
+# define ANSI_BLUE		"\x1b[1m\x1b[34m"
+# define ANSI_MAGENTA	"\x1b[1m\x1b[35m"
+# define ANSI_CYAN		"\x1b[1m\x1b[36m"
+# define ANSI_RESET		"\x1b[1m\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
 # define LIGHTRED		0xff0080
 
@@ -100,6 +100,7 @@ typedef struct		s_fractol
 	void			*win_ptr;
 	char			smooth;
 	t_image			*img;
+	char			lockjulia;
 	double			zoom;
 	double			rmin;
 	double			rmax;
@@ -132,5 +133,6 @@ void				put_legend(t_fractol *fract);
 
 int					handle_mouse(int button, int x, int y, t_fractol *fract);
 int					handle_key(int keycode, t_fractol *fract);
+int					julia_mouse(int x, int y, t_fractol *fract);
 
 #endif

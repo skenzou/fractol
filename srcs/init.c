@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:17:27 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 15:14:26 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:41:24 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void			default_values(t_fractol *fract)
 	fract->xoffset = 0.0;
 	fract->yoffset = 0.0;
 	fract->smooth = 1;
+	fract->lockjulia = 0;
 	(fract->thread == &mandelbrot_thread) && (fract->rmin = -2.5);
 	(fract->thread == &mandelbrot_thread) && (fract->rmax = 0.6);
 	(fract->thread == &mandelbrot_thread) && (fract->imin = -1.2);
@@ -64,8 +65,7 @@ t_fractol		*init_fract(char *name)
 	fract->win_ptr = mlx_new_window(fract->mlx_ptr, WIN_W + 500, WIN_H, "Frac");
 	if (!(fract->img = (t_image *)malloc(sizeof(t_image))))
 		exit(1);
-	if (!fract->win_ptr)
-		exit(1);
+	!fract->win_ptr ? exit(1) : 0;
 	if (!ft_strcmp(name, "Mandelbrot"))
 		fract->thread = &mandelbrot_thread;
 	if (!ft_strcmp(name, "Julia"))
@@ -76,6 +76,7 @@ t_fractol		*init_fract(char *name)
 		fract->thread = &tricorn_thread;
 	mlx_key_hook(fract->win_ptr, &handle_key, fract);
 	mlx_mouse_hook(fract->win_ptr, &handle_mouse, fract);
+	mlx_hook(fract->win_ptr, 6, 1L << 6, &julia_mouse, fract);
 	default_values(fract);
 	init_thread_data(fract);
 	create_image(fract);
