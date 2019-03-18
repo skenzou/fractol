@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/17 14:37:30 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/18 15:45:52 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,8 +69,8 @@ $(NAME): $(LIBFT_PATH)$(LIBFT_NAME) $(OBJ)
 		@echo
 		@make -C $(LFT_PATH)
 		@make -C $(MLX_PATH)
-		@$(CC) -o $(NAME) $(MLX_LINK) $(FRAM) -L $(LFT_PATH) -lft $^ -o $@
-		@printf "$(_BOLD)$(_RED)./fractol is ready for use\n$(_END)$(_CYAN)$(_END)"
+		@$(CC) -o $(NAME) $(MLX_LINK) -L $(LFT_PATH) -lft $^ -o $@
+		@printf "$(_BOLD)$(_RED)./fractol is ready for use\n$(_END)"
 		@printf "$(_BOLD)$(_RED)\n\nusage: ./fractol <fractol_name>\n$(_RESET)"
 		@printf "$(_BOLD)$(_CYAN)fractols:\n$(_RESET)"
 		@printf "$(_BOLD)$(_BLUE)--> Mandelbrot\n$(_RESET)"
@@ -78,17 +78,13 @@ $(NAME): $(LIBFT_PATH)$(LIBFT_NAME) $(OBJ)
 		@printf "$(_BOLD)$(_YELLOW)--> Burningship\n$(_RESET)"
 		@printf "$(_BOLD)$(_GREEN)--> Tricorn\n$(_RESET)"
 
-
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 		@mkdir -p $(OBJ_PATH) 2> /dev/null || true
 		@$(CC) $(C_FLAGS) $(INC) $(MLX_INC) -o $@ -c $<
 		@printf "$(_BOLD)$(_BLUE)$(MSG)$(_END) $(_BOLD)$(_CYAN)%-$(LONGEST)s\
 		$(_END)" $(notdir $<)
-		@if test -s srcs/$*.c; then \
-		printf "$(_GREEN) [SUCCES]\n$(_END)";\
-		else \
-		printf "$(_RED) [ERROR]\n$(_END)"; fi
-
+		@if test -s obj/$*.o; then \
+		printf "$(_GREEN) [SUCCES]\n$(_END)"; fi
 
 clean:
 		@make -C $(LFT_PATH) clean
