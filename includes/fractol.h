@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/18 15:39:54 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/18 20:02:12 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <pthread.h>
 # define TNUM			32
 # define ZOOMFACTOR		1.11
-# define WIN_W			1216
-# define WIN_H			900
+# define WIN_W			1408
+# define WIN_H			1200
 # define ESCAPE			53
 # define UPARROW		126
 # define DOWNARROW		125
@@ -48,7 +48,7 @@
 # define ANSI_CYAN		"\x1b[1m\x1b[36m"
 # define ANSI_RESET		"\x1b[1m\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
-# define LIGHTRED		0xff0080
+# define LIGHTRED		0xff0050
 
 typedef struct		s_var
 {
@@ -125,6 +125,7 @@ void				*julia_thread(void *data);
 void				*mandelbrot_thread(void *data);
 void				*burningship_thread(void *data);
 void				*tricorn_thread(void *data);
+double			abs_double(double nb);
 
 void				default_values(t_fractol *fract);
 t_fractol			*init_fract(char *name);
@@ -134,5 +135,10 @@ void				put_legend(t_fractol *fract);
 int					handle_mouse(int button, int x, int y, t_fractol *fract);
 int					handle_key(int keycode, t_fractol *fract);
 int					julia_mouse(int x, int y, t_fractol *fract);
+
+void				julia_thumbnail(t_fractol *f);
+void				tricorn_thumbnail(t_fractol *f);
+void				mandelbrot_thumbnails(t_fractol  *f);
+void				burningship_thumbnails(t_fractol *f);
 
 #endif

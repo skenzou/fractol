@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:46:58 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 17:42:05 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:56:19 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			process(t_fractol *fract)
 {
 	launch_threads(fract);
 	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img->ptr,
-																		0, 0);
+																		503, 0);
 }
 
 static void		check_error(int argc, char **argv)
@@ -60,6 +60,14 @@ static void		check_error(int argc, char **argv)
 	}
 }
 
+static void		put_thumbnails(t_fractol *fract)
+{
+	julia_thumbnail(fract);
+	tricorn_thumbnail(fract);
+	mandelbrot_thumbnails(fract);
+	burningship_thumbnails(fract);
+}
+
 int				main(int argc, char **argv)
 {
 	t_fractol *fract;
@@ -67,6 +75,7 @@ int				main(int argc, char **argv)
 	check_error(argc, argv);
 	fract = init_fract(argv[1]);
 	put_legend(fract);
+	put_thumbnails(fract);
 	process(fract);
 	mlx_loop(fract->mlx_ptr);
 	return (0);

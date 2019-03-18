@@ -6,13 +6,13 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 10:35:20 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/18 10:10:09 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/18 18:29:55 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static inline double	abs_double(double nb)
+double	abs_double(double nb)
 {
 	return (nb < 0 ? -nb : nb);
 }

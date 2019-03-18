@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/18 15:45:52 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/18 20:04:46 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,8 @@ LFT_PATH = ./libft/
 INC_PATH = ./includes
 SRC_PATH = ./srcs/
 
-SRC_NAME = main.c image.c events.c fractals.c init.c fractals2.c legend.c
+SRC_NAME = main.c image.c events.c fractals.c init.c fractals2.c legend.c \
+						thumbnails.c
 OBJ_NAME = $(SRC_NAME:.c=.o)
 INC_NAME = fractol.h
 

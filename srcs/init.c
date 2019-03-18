@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:17:27 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 17:41:24 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:57:34 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_fractol		*init_fract(char *name)
 		exit(1);
 	if (!(fract->mlx_ptr = mlx_init()))
 		exit(1);
-	fract->win_ptr = mlx_new_window(fract->mlx_ptr, WIN_W + 500, WIN_H, "Frac");
+	fract->win_ptr = mlx_new_window(fract->mlx_ptr, WIN_W + 1000, WIN_H, "Frac");
 	if (!(fract->img = (t_image *)malloc(sizeof(t_image))))
 		exit(1);
 	!fract->win_ptr ? exit(1) : 0;

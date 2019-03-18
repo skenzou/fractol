@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:44:08 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/17 16:32:24 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:31:30 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static inline void		zoom(t_fractol *f, int x, int y, double zoomfactor)
 
 int						julia_mouse(int x, int y, t_fractol *fract)
 {
+	x -= 503;
 	if (fract->thread == &julia_thread && x > 0 && x < WIN_W && y > 0
 											&& y < WIN_H && !fract->lockjulia)
 	{
@@ -48,6 +49,15 @@ int						handle_mouse(int button, int x, int y, t_fractol *fract)
 {
 	if (x < 0 || x > WIN_W || y < 0 || y > WIN_H)
 		return (1);
+	if (x > 0 && x < 500 && button == 1)
+	{
+		fract->thread = y < 300 && y > 0 ? &julia_thread : fract->thread;
+		fract->thread = y < 603 && y > 302 ? &tricorn_thread : fract->thread;
+		fract->thread = y < 906 && y > 605 ? &mandelbrot_thread : fract->thread;
+		fract->thread = y < 1209 && y > 908 ? &burningship_thread : fract->thread;
+		default_values(fract);
+	}
+	x -= 503;
 	if (button == SCROLLUP)
 	{
 		fract->zoom *= ZOOMFACTOR;
