@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 10:35:20 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/18 18:29:55 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/19 12:26:37 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ double	abs_double(double nb)
 	return (nb < 0 ? -nb : nb);
 }
 
-void					*burningship_thread(void *data)
+void	*burningship_thread(void *data)
 {
 	register t_var			var;
 	register t_thread_data	*d;
