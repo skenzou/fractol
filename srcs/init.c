@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 13:17:27 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/18 19:57:34 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/21 10:15:35 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,29 +56,29 @@ void			default_values(t_fractol *fract)
 
 t_fractol		*init_fract(char *name)
 {
-	t_fractol *fract;
+	t_fractol *f;
 
-	if (!(fract = (t_fractol *)ft_memalloc(sizeof(t_fractol))))
+	if (!(f = (t_fractol *)ft_memalloc(sizeof(t_fractol))))
 		exit(1);
-	if (!(fract->mlx_ptr = mlx_init()))
+	if (!(f->mlx_ptr = mlx_init()))
 		exit(1);
-	fract->win_ptr = mlx_new_window(fract->mlx_ptr, WIN_W + 1000, WIN_H, "Frac");
-	if (!(fract->img = (t_image *)malloc(sizeof(t_image))))
+	f->win_ptr = mlx_new_window(f->mlx_ptr, WIN_W + 1000, WIN_H, "Frac");
+	if (!(f->img = (t_image *)malloc(sizeof(t_image))))
 		exit(1);
-	!fract->win_ptr ? exit(1) : 0;
+	!f->win_ptr ? exit(1) : 0;
 	if (!ft_strcmp(name, "Mandelbrot"))
-		fract->thread = &mandelbrot_thread;
+		f->thread = &mandelbrot_thread;
 	if (!ft_strcmp(name, "Julia"))
-		fract->thread = &julia_thread;
+		f->thread = &julia_thread;
 	if (!ft_strcmp(name, "Burningship"))
-		fract->thread = &burningship_thread;
+		f->thread = &burningship_thread;
 	if (!ft_strcmp(name, "Tricorn"))
-		fract->thread = &tricorn_thread;
-	mlx_key_hook(fract->win_ptr, &handle_key, fract);
-	mlx_mouse_hook(fract->win_ptr, &handle_mouse, fract);
-	mlx_hook(fract->win_ptr, 6, 1L << 6, &julia_mouse, fract);
-	default_values(fract);
-	init_thread_data(fract);
-	create_image(fract);
-	return (fract);
+		f->thread = &tricorn_thread;
+	mlx_key_hook(f->win_ptr, &handle_key, f);
+	mlx_mouse_hook(f->win_ptr, &handle_mouse, f);
+	mlx_hook(f->win_ptr, 6, 1L << 6, &julia_mouse, f);
+	default_values(f);
+	init_thread_data(f);
+	create_image(f);
+	return (f);
 }
