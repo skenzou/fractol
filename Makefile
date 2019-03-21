@@ -6,7 +6,7 @@
 #    By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/03 09:24:41 by midrissi          #+#    #+#              #
-#    Updated: 2019/03/18 20:04:46 by midrissi         ###   ########.fr        #
+#    Updated: 2019/03/21 10:44:25 by midrissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,24 +37,19 @@ MSG				=	Compiling fractol
 .PHONY: all, $(NAME), clean, fclean, re
 
 NAME = fractol
-
 cc = gcc
-C_FLAGS = -Wall -Wextra -Werror -pthread -Ofast
-
 MLX_PATH = ./minilibx
-MLX_LINK = -L $(MLX_PATH) -lmlx -framework OpenGL -framework AppKit
 MLX_INC = -I $(MLX_PATH)
-
+MLX_LINK = -L $(MLX_PATH) -lmlx -framework OpenGL -framework AppKit
+C_FLAGS = -Wall -Wextra -Werror -Ofast -pthread
+SRC_NAME = main.c image.c events.c fractals.c init.c fractals2.c legend.c \
+						thumbnails.c
 OBJ_PATH = ./obj/
 LFT_PATH = ./libft/
 INC_PATH = ./includes
 SRC_PATH = ./srcs/
-
-SRC_NAME = main.c image.c events.c fractals.c init.c fractals2.c legend.c \
-						thumbnails.c
 OBJ_NAME = $(SRC_NAME:.c=.o)
 INC_NAME = fractol.h
-
 SRC = $(addprefix $(SRC_PATH),$(SRC_NAME))
 LONGEST			=	$(shell echo $(notdir $(SRC)) | tr " " "\n" | awk ' { if (\
 				length > x ) { x = length; y = $$0 } }END{ print y }' | wc -c)
@@ -91,7 +86,7 @@ clean:
 		@make -C $(LFT_PATH) clean
 		@make -C $(MLX_PATH) clean
 		@rm -rf $(OBJ_PATH)
-		@echo "$(_BOLD)$(_RED)Sucessfuly removed all objects from fractol$(_END)"
+		@echo "$(_BOLD)$(_RED)Sucesfuly removed all objects from fractol$(_END)"
 
 fclean: clean
 		@make -C $(MLX_PATH) clean
