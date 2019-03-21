@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/27 03:59:17 by midrissi          #+#    #+#             */
-/*   Updated: 2019/02/27 04:03:15 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/21 11:53:19 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int		get_light(int start, int end, double percentage)
 	return ((int)((1 - percentage) * start + percentage * end));
 }
 
-int		ft_get_color(int color1, int color2, double percentage)
+int				ft_get_color(int color1, int color2, double percentage)
 {
 	int		red;
 	int		green;
