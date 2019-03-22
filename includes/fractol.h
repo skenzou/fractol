@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/21 11:54:31 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/22 19:08:06 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@
 # define ANSI_RESET		"\x1b[1m\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
 # define LIGHTRED		0xff0050
+# define RED				0x901110
+# define WHITE			0xFFFFFF
 
 typedef struct		s_var
 {
@@ -64,6 +66,13 @@ typedef struct		s_var
 	int			y;
 	int			i;
 }					t_var;
+
+typedef struct		s_point
+{
+	int x;
+	int y;
+	int color;
+}									t_point;
 
 typedef struct		s_image
 {
@@ -113,6 +122,8 @@ typedef struct		s_fractol
 	int				m_it;
 	t_thread_data	tdata[TNUM];
 	pthread_t		tids[TNUM];
+	t_list		*palette;
+	int				color;
 	void			*(*thread)(void *data);
 }					t_fractol;
 
@@ -132,7 +143,7 @@ t_fractol			*init_fract(char *name);
 
 void				put_legend(t_fractol *fract);
 
-int					handle_mouse(int button, int x, int y, t_fractol *fract);
+int					handle_mouse(int b, int x, int y, t_fractol *fract);
 int					handle_key(int keycode, t_fractol *fract);
 int					julia_mouse(int x, int y, t_fractol *fract);
 

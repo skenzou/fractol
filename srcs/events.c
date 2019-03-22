@@ -6,16 +6,11 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:44:08 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/19 12:25:58 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/22 19:38:02 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-static inline double	interpolate(double start, double end, double interpolat)
-{
-	return (start + ((end - start) * interpolat));
-}
 
 static inline void		zoom(t_fractol *f, int x, int y, double zoomfactor)
 {
@@ -45,30 +40,43 @@ int						julia_mouse(int x, int y, t_fractol *fract)
 	return (1);
 }
 
-int						handle_mouse(int button, int x, int y, t_fractol *fract)
+static inline int  fetchcolor(t_fractol *fract, int x, int y)
 {
-	if (x > 0 && x < 500 && y < WIN_H && y > 0 && button == 1)
+	t_list *list;
+	t_point point;
+
+	list = fract->palette;
+	fract->smooth = 0;
+	while (list)
 	{
-		fract->thread = y < 300 && y > 0 ? &julia_thread : fract->thread;
-		fract->thread = y < 603 && y > 302 ? &tricorn_thread : fract->thread;
-		fract->thread = y < 906 && y > 605 ? &mandelbrot_thread : fract->thread;
-		fract->thread = y < 1209 && y > 908 ? &burningship_thread
-																: fract->thread;
-		default_values(fract);
-		process(fract);
+		point = *(t_point *)list->content;
+		if (point.x == x && point.y == y)
+			return (point.color);
+		list = list->next;
 	}
-	if (x < 503 || x > WIN_W + 503 || y < 0 || y > WIN_H)
-		return (1);
-	x -= 503;
-	if (button == SCROLLUP)
+	return (0);
+}
+
+int						handle_mouse(int b, int x, int y, t_fractol *fract)
+{
+	if ((b == 5 || b == 4) && x > 503 && x < WIN_W + 503 && y > 0 && y < WIN_H)
 	{
-		fract->zoom *= ZOOMFACTOR;
-		zoom(fract, x, y, ZOOMFACTOR);
+		zoom(fract, x - 503, y, b == 5 ? ZOOMFACTOR : 1 / ZOOMFACTOR);
+		fract->zoom = b == 5 ? fract->zoom * ZOOMFACTOR : fract->zoom / ZOOMFACTOR;
 	}
-	if (button == SCROLLDOWN)
+	if (b == 1)
 	{
-		fract->zoom /= ZOOMFACTOR;
-		zoom(fract, x, y, 1.0 / ZOOMFACTOR);
+		if (x >= WIN_W + 550 && x < WIN_W + 580 && y > 650 && y < 950)
+			fract->color = fetchcolor(fract, x, y);
+		if (x > 0 && x < 500)
+		{
+			fract->thread = y < 300 && y > 0 ? &julia_thread : fract->thread;
+			fract->thread = y < 603 && y > 302 ? &tricorn_thread : fract->thread;
+			fract->thread = y < 906 && y > 605 ? &mandelbrot_thread : fract->thread;
+			fract->thread = y < 1209 && y > 908 ? &burningship_thread
+																	: fract->thread;
+			default_values(fract);
+		}
 	}
 	process(fract);
 	return (1);
@@ -81,9 +89,10 @@ int						handle_key(int keycode, t_fractol *fract)
 	(keycode == LEFTARROW) && (fract->xoffset += 0.1 / fract->zoom);
 	(keycode == UPARROW) && (fract->yoffset += 0.1 / fract->zoom);
 	(keycode == DOWNARROW) && (fract->yoffset -= 0.1 / fract->zoom);
-	(keycode == WKEY || keycode == PLUS) && (fract->m_it += 30);
+	(keycode == WKEY || keycode == PLUS) && (fract->m_it < 150)
+														&& (fract->m_it += 15);
 	(keycode == SKEY || keycode == MINUS) && (fract->m_it > 30)
-														&& (fract->m_it -= 30);
+														&& (fract->m_it -= 15);
 	if (keycode > 17 && keycode < 22)
 	{
 		(keycode == 18) && (fract->thread = &mandelbrot_thread);
