@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 12:44:08 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/22 19:38:02 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/23 19:24:33 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int						julia_mouse(int x, int y, t_fractol *fract)
 	return (1);
 }
 
-static inline int  fetchcolor(t_fractol *fract, int x, int y)
+static inline int		fetchcolor(t_fractol *fract, int x, int y)
 {
-	t_list *list;
-	t_point point;
+	t_list		*list;
+	t_point		point;
 
 	list = fract->palette;
 	fract->smooth = 0;
@@ -57,28 +57,27 @@ static inline int  fetchcolor(t_fractol *fract, int x, int y)
 	return (0);
 }
 
-int						handle_mouse(int b, int x, int y, t_fractol *fract)
+int						handle_mouse(int b, int x, int y, t_fractol *f)
 {
 	if ((b == 5 || b == 4) && x > 503 && x < WIN_W + 503 && y > 0 && y < WIN_H)
 	{
-		zoom(fract, x - 503, y, b == 5 ? ZOOMFACTOR : 1 / ZOOMFACTOR);
-		fract->zoom = b == 5 ? fract->zoom * ZOOMFACTOR : fract->zoom / ZOOMFACTOR;
+		zoom(f, x - 503, y, b == 5 ? ZOOMFACTOR : 1 / ZOOMFACTOR);
+		f->zoom = b == 5 ? f->zoom * ZOOMFACTOR : f->zoom / ZOOMFACTOR;
 	}
 	if (b == 1)
 	{
 		if (x >= WIN_W + 550 && x < WIN_W + 580 && y > 650 && y < 950)
-			fract->color = fetchcolor(fract, x, y);
+			f->color = fetchcolor(f, x, y);
 		if (x > 0 && x < 500)
 		{
-			fract->thread = y < 300 && y > 0 ? &julia_thread : fract->thread;
-			fract->thread = y < 603 && y > 302 ? &tricorn_thread : fract->thread;
-			fract->thread = y < 906 && y > 605 ? &mandelbrot_thread : fract->thread;
-			fract->thread = y < 1209 && y > 908 ? &burningship_thread
-																	: fract->thread;
-			default_values(fract);
+			f->thread = y < 300 && y > 0 ? &julia_thread : f->thread;
+			f->thread = y < 603 && y > 302 ? &tricorn_thread : f->thread;
+			f->thread = y < 906 && y > 605 ? &mandelbrot_thread : f->thread;
+			f->thread = y < 1209 && y > 908 ? &burningship_thread : f->thread;
+			default_values(f);
 		}
 	}
-	process(fract);
+	process(f);
 	return (1);
 }
 

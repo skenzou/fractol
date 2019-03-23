@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/22 19:08:06 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/23 19:23:07 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdio.h>
 # include <mlx.h>
 # include <math.h>
-# include <fcntl.h>
 # include <pthread.h>
 # define TNUM			32
 # define ZOOMFACTOR		1.11
@@ -39,7 +38,6 @@
 # define SCROLLDOWN		4
 # define SPACE			49
 # define RKEY			15
-# define PALETTERADIUS	100
 # define ANSI_RED		"\x1b[1m\x1b[31m"
 # define ANSI_GREEN		"\x1b[1m\x1b[32m"
 # define ANSI_YELLOW	"\x1b[1m\x1b[33m"
@@ -49,7 +47,7 @@
 # define ANSI_RESET		"\x1b[1m\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
 # define LIGHTRED		0xff0050
-# define RED				0x901110
+# define RED			0x901110
 # define WHITE			0xFFFFFF
 
 typedef struct		s_var
@@ -72,7 +70,7 @@ typedef struct		s_point
 	int x;
 	int y;
 	int color;
-}									t_point;
+}					t_point;
 
 typedef struct		s_image
 {
@@ -122,7 +120,7 @@ typedef struct		s_fractol
 	int				m_it;
 	t_thread_data	tdata[TNUM];
 	pthread_t		tids[TNUM];
-	t_list		*palette;
+	t_list			*palette;
 	int				color;
 	void			*(*thread)(void *data);
 }					t_fractol;

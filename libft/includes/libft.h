@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/04 13:56:36 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/22 19:37:30 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/23 19:23:13 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char			*ft_utoa_base(uintmax_t nb,
 				unsigned base, int uppercase);
 int				ft_count_char(char c, char *str);
 int				ft_count_words(char const *s, char c);
-double		interpolate(double start, double end, double interpolat);
+double			interpolate(double start, double end, double interpolat);
 
 typedef struct	s_list
 {
