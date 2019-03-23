@@ -6,7 +6,7 @@
 /*   By: midrissi <midrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/09 04:10:21 by midrissi          #+#    #+#             */
-/*   Updated: 2019/03/23 19:23:07 by midrissi         ###   ########.fr       */
+/*   Updated: 2019/03/23 21:28:11 by midrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define ANSI_BLUE		"\x1b[1m\x1b[34m"
 # define ANSI_MAGENTA	"\x1b[1m\x1b[35m"
 # define ANSI_CYAN		"\x1b[1m\x1b[36m"
-# define ANSI_RESET		"\x1b[1m\x1b[0m"
+# define ANSI_RESET		"\x1b[0m"
 # define ANSI_BOLD		"\x1b[1m"
 # define LIGHTRED		0xff0050
 # define RED			0x901110
